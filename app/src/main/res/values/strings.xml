@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">MovieBuzz</string>
+    <string name="sortByRatingName">Sort by Top Rating</string>
+    <string name="sortByPopularityName">Sort by Popularity</string>
+    <string name="date">Released on:</string>
+    <string name="movieThumbnailContentDescription">Image shows movie thumbnail</string>
+    <string name="ratingIconContentDescription">It shows rating icon</string>
+
+</resources>
