@@ -17,6 +17,4 @@ public class AppConstants {
     public static final String releaseDateKey = "releaseDate";
     public static final String ratingKey = "userRating";
     public static final String overviewKey = "overview";
-    public static final String progressMessage = "Please wait while we are fetching movies";
-    public static final String errorString = "Something went wrong. Please check your network settings or try again later";
 }

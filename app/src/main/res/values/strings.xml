@@ -5,5 +5,7 @@
     <string name="date">Released on:</string>
     <string name="movieThumbnailContentDescription">Image shows movie thumbnail</string>
     <string name="ratingIconContentDescription">It shows rating icon</string>
+    <string name="progressMessage">Please wait while we are fetching movies</string>
+    <string name="errorString">Something went wrong. Please check your network settings or try again later</string>
 
 </resources>

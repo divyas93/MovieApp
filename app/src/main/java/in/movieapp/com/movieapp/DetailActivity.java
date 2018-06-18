@@ -20,8 +20,6 @@ public class DetailActivity extends AppCompatActivity {
     TextView mReleaseDateText;
     TextView mOverViewText;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
 
         }
         else {
-            Toast mToast = Toast.makeText(this, "Oops!!! Something went wrong", Toast.LENGTH_LONG);
+            Toast mToast = Toast.makeText(this, getString(R.string.errorString), Toast.LENGTH_LONG);
             mToast.show();
         }
     }

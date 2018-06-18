@@ -28,7 +28,7 @@ import retrofit2.Retrofit;
  * Created by DivyaSethi.
  */
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieThumbnailClickListener{
+public class MainActivity extends AppCompatActivity{
 
     private RecyclerView movieRecyclerView;
     private MovieAdapter movieAdapter;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void getPopularMovieResults(){
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setCancelable(false);
-        progressDialog.setMessage(AppConstants.progressMessage);
+        progressDialog.setMessage(getString(R.string.progressMessage));
         progressDialog.show();
 
         Call<MovieResultsResponse> movieResultsCall = retorfitAPIInterface.getPopularMovieResults(AppConstants.apiKeyValue);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void getTopRatedMovieResults(){
         final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setCancelable(false);
-        progressDialog.setMessage(AppConstants.progressMessage);
+        progressDialog.setMessage(getString(R.string.progressMessage));
         progressDialog.show();
 
         Call<MovieResultsResponse> movieResultsCall = retorfitAPIInterface.getTopRatingMovieResults(AppConstants.apiKeyValue);
@@ -111,14 +111,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         if(toast!=null) {
             toast.cancel();
         }
-        toast = Toast.makeText(this, AppConstants.errorString, Toast.LENGTH_LONG);
+        toast = Toast.makeText(this, getString(R.string.errorString), Toast.LENGTH_LONG);
         toast.show();
     }
 
     private void showMoviesInRecyclerView(){
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
         movieRecyclerView.setLayoutManager(layoutManager);
-        movieAdapter = new MovieAdapter(movieResultsResponseData.size(), movieResultsResponseData, this);
+        movieAdapter = new MovieAdapter(movieResultsResponseData, this);
         movieRecyclerView.setAdapter(movieAdapter);
     }
 
@@ -158,16 +158,5 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void movieThumbnailClick(String posterPath, String title, String overView, String releaseDate, String rating) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(AppConstants.titleKey, title);
-        intent.putExtra(AppConstants.releaseDateKey,releaseDate);
-        intent.putExtra(AppConstants.overviewKey, overView);
-        intent.putExtra(AppConstants.posterPathKey,posterPath);
-        intent.putExtra(AppConstants.ratingKey,rating);
-        startActivity(intent);
     }
 }

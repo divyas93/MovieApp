@@ -1,6 +1,8 @@
 package in.movieapp.com.movieapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,14 +22,12 @@ import in.movieapp.com.movieapp.POJO.MovieResultsResponse;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    private int numberOfMovies;
     private List<MovieResultsResponse.MovieResultsInfo> movieResultsResponse;
-    private MovieThumbnailClickListener clickListener;
+    Context mContext;
 
-    public MovieAdapter(int numberOfMovies, List<MovieResultsResponse.MovieResultsInfo> movieResultsResponse, MovieThumbnailClickListener clickListener) {
-        this.numberOfMovies = numberOfMovies;
+    public MovieAdapter(List<MovieResultsResponse.MovieResultsInfo> movieResultsResponse, Context context) {
         this.movieResultsResponse = movieResultsResponse;
-        this.clickListener = clickListener;
+        mContext = context;
     }
 
     @NonNull
@@ -48,11 +48,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        return numberOfMovies;
-    }
-
-    public interface MovieThumbnailClickListener {
-        void movieThumbnailClick(String posterPath, String title, String overView, String releaseDate, String rating);
+        return movieResultsResponse.size();
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -73,8 +69,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         @Override
         public void onClick(View view) {
-            clickListener.movieThumbnailClick(movieResultsResponse.get(getAdapterPosition()).getPosterPathThumbnail(), movieResultsResponse.get(getAdapterPosition()).getOriginalTitle()
-            , movieResultsResponse.get(getAdapterPosition()).getOverview(), movieResultsResponse.get(getAdapterPosition()).getReleaseDate(), movieResultsResponse.get(getAdapterPosition()).getUserRating().toString());
+            Intent intent = new Intent(mContext, DetailActivity.class);
+            intent.putExtra(AppConstants.titleKey, movieResultsResponse.get(getAdapterPosition()).getOriginalTitle());
+            intent.putExtra(AppConstants.releaseDateKey,movieResultsResponse.get(getAdapterPosition()).getReleaseDate());
+            intent.putExtra(AppConstants.overviewKey, movieResultsResponse.get(getAdapterPosition()).getOverview());
+            intent.putExtra(AppConstants.posterPathKey,movieResultsResponse.get(getAdapterPosition()).getPosterPathThumbnail());
+            intent.putExtra(AppConstants.ratingKey,movieResultsResponse.get(getAdapterPosition()).getUserRating().toString());
+            mContext.startActivity(intent);
+
         }
     }
 }
