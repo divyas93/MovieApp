@@ -1,8 +1,6 @@
 package in.movieapp.com.movieapp;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,12 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.List;
 
+import in.movieapp.com.movieapp.Adapter.MovieAdapter;
 import in.movieapp.com.movieapp.Network.RetorfitAPIInterface;
 import in.movieapp.com.movieapp.Network.RetrofitClient;
 import in.movieapp.com.movieapp.POJO.MovieResultsResponse;
@@ -46,13 +43,13 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         movieRecyclerView = (RecyclerView) findViewById(R.id.movieRecyclerView);
-        retrofitClient = getRetrofitAPIClient();
+        retrofitClient = getRetrofitAPIClient(AppConstants.movieBaseURL);
         retorfitAPIInterface = getRetorfitAPIInterface();
         getPopularMovieResults();
     }
 
-    private Retrofit getRetrofitAPIClient() {
-        return RetrofitClient.getRetrofitAPIClient();
+    private Retrofit getRetrofitAPIClient(String baseUrl) {
+        return RetrofitClient.getRetrofitAPIClient(baseUrl);
     }
 
     private RetorfitAPIInterface getRetorfitAPIInterface() {
@@ -155,6 +152,10 @@ public class MainActivity extends AppCompatActivity{
         else if(item.getItemId() == R.id.sortByRatingAction) {
             getTopRatedMovieResults();
             showTopRatingMenuOption = false;
+        }
+
+        else if(item.getItemId() == R.id.favoritesScreen) {
+            // handle new screen
         }
 
         return super.onOptionsItemSelected(item);

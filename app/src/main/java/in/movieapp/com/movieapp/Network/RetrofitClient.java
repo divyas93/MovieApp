@@ -12,9 +12,9 @@ public class RetrofitClient {
 
     private static Retrofit retrofitClient = null;
 
-    public static Retrofit getRetrofitAPIClient() {
+    public static Retrofit getRetrofitAPIClient(String baseUrl) {
         retrofitClient = new Retrofit.Builder()
-                .baseUrl(AppConstants.movieBaseURL)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

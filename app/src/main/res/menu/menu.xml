@@ -12,4 +12,10 @@
         android:title="@string/sortByPopularityName"
         android:visible="false"/>
 
+    <item
+        android:id="@+id/favoritesScreen"
+        android:title="@string/favoritesScreen"
+        android:visible="true"/>
+
+
 </menu>

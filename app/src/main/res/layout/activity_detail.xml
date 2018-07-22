@@ -144,6 +144,45 @@
             android:textAlignment="gravity"
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/trailerHeading"
+            android:text="Trailers:"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingEnd="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="gravity"
+            android:textColor="@color/white"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/trailerRecyclerViewer"
+            android:orientation="horizontal">
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/trailerErrorText"
+            android:text="No Trailer found"
+            android:visibility="gone"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:paddingEnd="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="gravity"
+            android:textColor="@color/white"
+            />
 
     </LinearLayout>
 

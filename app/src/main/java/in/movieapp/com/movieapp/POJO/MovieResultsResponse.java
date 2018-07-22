@@ -35,7 +35,8 @@ public class MovieResultsResponse {
         public Float userRating;
         @SerializedName("release_date")
         public String releaseDate;
-
+        @SerializedName("id")
+        public int id;
 
         public String getPosterPathThumbnail() {
             return posterPathThumbnail;
@@ -78,5 +79,12 @@ public class MovieResultsResponse {
             this.releaseDate = releaseDate;
         }
 
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
     }
 }

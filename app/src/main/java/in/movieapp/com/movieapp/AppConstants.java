@@ -17,4 +17,10 @@ public class AppConstants {
     public static final String releaseDateKey = "releaseDate";
     public static final String ratingKey = "userRating";
     public static final String overviewKey = "overview";
+    public static final String videos = "videos";
+    public static final String reviews = "reviews";
+    public static final String id = "id";
+    public static final String youtubeTrailerImageBaseUrl = "https://img.youtube.com/vi/";
+    public static final String youtubeWebBaseUrl = "https://www.youtube.com/watch?v=";
+    public static final String youtubeAppBaseUrl = "vnd.youtube:";
 }
