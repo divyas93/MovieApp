@@ -5,8 +5,16 @@
     <string name="date">Released on:</string>
     <string name="movieThumbnailContentDescription">Image shows movie thumbnail</string>
     <string name="ratingIconContentDescription">It shows rating icon</string>
-    <string name="progressMessage">Please wait while we are fetching movies</string>
-    <string name="errorString">Something went wrong. Please check your network settings or try again later</string>
+    <string name="progressMessage">Please wait while we are fetching movies.</string>
+    <string name="networkErrorString">Something went wrong, couldn\'t load movies. Please check your network settings or try again later.\n \n You can also check your favorite movies.</string>
+    <string name="errorString">Something went wrong. Please try again later</string>
     <string name="favoritesScreen">Favorites</string>
+    <string name="trailerHeadingText">Trailers:</string>
+    <string name="trailerErrorText">No Trailer found.</string>
+    <string name="trailerNetworkErrorText">No Trailer found. Please check your network settings.</string>
+    <string name="reviewHeadingText">User Reviews:</string>
+    <string name="reviewErrorText">No review found.</string>
+    <string name="reviewNetworkErrorText">No Reviews found. Please check your network settings.</string>
+    <string name="noFavMovieText">No favorite movie saved. You can view movies by top rating or popularity. Select option from overflow menu.</string>
 
 </resources>

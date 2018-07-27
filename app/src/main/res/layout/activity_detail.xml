@@ -148,7 +148,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/trailerHeading"
-            android:text="Trailers:"
+            android:text="@string/trailerHeadingText"
             android:textSize="14sp"
             android:textStyle="bold"
             android:paddingEnd="5dp"
@@ -161,7 +161,7 @@
             />
 
         <android.support.v7.widget.RecyclerView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/trailerRecyclerViewer"
             android:orientation="horizontal">
@@ -171,7 +171,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/trailerErrorText"
-            android:text="No Trailer found"
+            android:text="@string/trailerErrorText"
+            android:visibility="gone"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:paddingEnd="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="gravity"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/reviewHeading"
+            android:text="@string/reviewHeadingText"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingEnd="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="10dp"
+            android:textAlignment="gravity"
+            android:textColor="@color/white"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/reviewRecyclerViewer"
+            android:orientation="vertical">
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/reviewErrorText"
+            android:text="@string/reviewErrorText"
             android:visibility="gone"
             android:textSize="14sp"
             android:textStyle="italic"

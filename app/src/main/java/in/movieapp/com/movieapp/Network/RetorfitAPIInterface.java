@@ -2,6 +2,7 @@ package in.movieapp.com.movieapp.Network;
 
 import in.movieapp.com.movieapp.AppConstants;
 import in.movieapp.com.movieapp.POJO.MovieResultsResponse;
+import in.movieapp.com.movieapp.POJO.ReviewResultsResponse;
 import in.movieapp.com.movieapp.POJO.TrailerResultResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -23,5 +24,5 @@ public interface RetorfitAPIInterface {
     Call<TrailerResultResponse> getTrailerResults(@Query(AppConstants.apiKey) String api_key);
 
     @GET(AppConstants.reviews)
-    Call<TrailerResultResponse> getMovieReviews(@Query(AppConstants.apiKey) String api_key);
+    Call<ReviewResultsResponse> getMovieReviews(@Query(AppConstants.apiKey) String api_key);
 }

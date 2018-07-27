@@ -1,6 +1,5 @@
 package in.movieapp.com.movieapp.Network;
 
-import in.movieapp.com.movieapp.AppConstants;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

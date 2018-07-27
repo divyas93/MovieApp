@@ -1,6 +1,7 @@
 package in.movieapp.com.movieapp;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,52 +9,44 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
 import in.movieapp.com.movieapp.Adapter.MovieAdapter;
+import in.movieapp.com.movieapp.Network.NetworkUtils;
 import in.movieapp.com.movieapp.Network.RetorfitAPIInterface;
-import in.movieapp.com.movieapp.Network.RetrofitClient;
 import in.movieapp.com.movieapp.POJO.MovieResultsResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * Created by DivyaSethi.
  */
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView movieRecyclerView;
     private MovieAdapter movieAdapter;
     private MenuItem topRating;
     private MenuItem popularity;
 
-    private Retrofit retrofitClient;
     private RetorfitAPIInterface retorfitAPIInterface;
-    private List<MovieResultsResponse.MovieResultsInfo> movieResultsResponseData;
     private boolean showTopRatingMenuOption = true;
-    private Toast toast;
+    private TextView mTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         movieRecyclerView = (RecyclerView) findViewById(R.id.movieRecyclerView);
-        retrofitClient = getRetrofitAPIClient(AppConstants.movieBaseURL);
-        retorfitAPIInterface = getRetorfitAPIInterface();
+        mTextView= (TextView) findViewById(R.id.favoriteMovie);
+        retorfitAPIInterface = new NetworkUtils().getRetorfitAPIInterface(AppConstants.movieBaseURL);
         getPopularMovieResults();
-    }
-
-    private Retrofit getRetrofitAPIClient(String baseUrl) {
-        return RetrofitClient.getRetrofitAPIClient(baseUrl);
-    }
-
-    private RetorfitAPIInterface getRetorfitAPIInterface() {
-        return retrofitClient.create(RetorfitAPIInterface.class);
     }
 
     private void getPopularMovieResults(){
@@ -66,16 +59,25 @@ public class MainActivity extends AppCompatActivity{
         movieResultsCall.enqueue(new Callback<MovieResultsResponse>() {
             @Override
             public void onResponse(Call<MovieResultsResponse> call, Response<MovieResultsResponse> response) {
-                Log.d("responseGET", response.body().getMovieResults().toString());
-                progressDialog.dismiss();
-                movieResultsResponseData = response.body().getMovieResults();
-                showMoviesInRecyclerView();
+                if (response.code() == 200) {
+                    Log.d(TAG + "popularMovieGetResponse", response.body().getMovieResults().toString());
+                    progressDialog.dismiss();
+                    List<MovieResultsResponse.MovieResultsInfo> movieResultsResponseData = response.body().getMovieResults();
+                    setMovieRecyclerViewAndDefaultTextViewVisibility(View.VISIBLE, View.GONE);
+                    showMoviesInRecyclerView(movieResultsResponseData);
+                }
+                else {
+                    progressDialog.dismiss();
+                    setMovieRecyclerViewAndDefaultTextViewVisibility(View.GONE, View.VISIBLE);
+                    mTextView.setText(getString(R.string.errorString));
+                }
             }
 
             @Override
             public void onFailure(Call<MovieResultsResponse> call, Throwable t) {
                 progressDialog.dismiss();
-                showErrorScreen();
+                setMovieRecyclerViewAndDefaultTextViewVisibility(View.GONE, View.VISIBLE);
+                mTextView.setText(getString(R.string.networkErrorString));
             }
         });
     }
@@ -90,29 +92,30 @@ public class MainActivity extends AppCompatActivity{
         movieResultsCall.enqueue(new Callback<MovieResultsResponse>() {
             @Override
             public void onResponse(Call<MovieResultsResponse> call, Response<MovieResultsResponse> response) {
-                Log.d("responseGET", response.body().getMovieResults().toString());
-                progressDialog.dismiss();
-                movieResultsResponseData = response.body().getMovieResults();
-                showMoviesInRecyclerView();
+                if(response.code() == 200) {
+                    Log.d(TAG + " topMoviesGetResponse", response.body().getMovieResults().toString());
+                    progressDialog.dismiss();
+                    List<MovieResultsResponse.MovieResultsInfo> movieResultsResponseData = response.body().getMovieResults();
+                    setMovieRecyclerViewAndDefaultTextViewVisibility(View.VISIBLE, View.GONE);
+                    showMoviesInRecyclerView(movieResultsResponseData);
+                }
+                else {
+                    progressDialog.dismiss();
+                    setMovieRecyclerViewAndDefaultTextViewVisibility(View.GONE, View.VISIBLE);
+                    mTextView.setText(getString(R.string.errorString));
+                }
             }
 
             @Override
             public void onFailure(Call<MovieResultsResponse> call, Throwable t) {
                 progressDialog.dismiss();
-                showErrorScreen();
+                setMovieRecyclerViewAndDefaultTextViewVisibility(View.GONE, View.VISIBLE);
+                mTextView.setText(getString(R.string.networkErrorString));
             }
         });
     }
 
-    private void showErrorScreen(){
-        if(toast!=null) {
-            toast.cancel();
-        }
-        toast = Toast.makeText(this, getString(R.string.errorString), Toast.LENGTH_LONG);
-        toast.show();
-    }
-
-    private void showMoviesInRecyclerView(){
+    private void showMoviesInRecyclerView(List<MovieResultsResponse.MovieResultsInfo> movieResultsResponseData){
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
         movieRecyclerView.setLayoutManager(layoutManager);
         movieAdapter = new MovieAdapter(movieResultsResponseData, this);
@@ -134,7 +137,7 @@ public class MainActivity extends AppCompatActivity{
             popularity.setVisible(false);
         }
 
-        else {
+        else if (!showTopRatingMenuOption) {
             topRating.setVisible(false);
             popularity.setVisible(true);
         }
@@ -155,9 +158,16 @@ public class MainActivity extends AppCompatActivity{
         }
 
         else if(item.getItemId() == R.id.favoritesScreen) {
-            // handle new screen
+            Intent intent = new Intent(this, FavActivity.class);
+            startActivity(intent);
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setMovieRecyclerViewAndDefaultTextViewVisibility(int recyclerViewVisibility, int textViewVisibility) {
+        movieRecyclerView.setVisibility(recyclerViewVisibility);
+        mTextView.setVisibility(textViewVisibility);
     }
 }

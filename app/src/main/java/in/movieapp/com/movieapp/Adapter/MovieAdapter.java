@@ -76,7 +76,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             intent.putExtra(AppConstants.releaseDateKey,movieResultsResponse.get(getAdapterPosition()).getReleaseDate());
             intent.putExtra(AppConstants.overviewKey, movieResultsResponse.get(getAdapterPosition()).getOverview());
             intent.putExtra(AppConstants.posterPathKey,movieResultsResponse.get(getAdapterPosition()).getPosterPathThumbnail());
-            intent.putExtra(AppConstants.ratingKey,movieResultsResponse.get(getAdapterPosition()).getUserRating().toString());
+            intent.putExtra(AppConstants.ratingKey,movieResultsResponse.get(getAdapterPosition()).getUserRating());
             intent.putExtra(AppConstants.id, movieResultsResponse.get(getAdapterPosition()).getId());
             mContext.startActivity(intent);
 
