@@ -27,8 +27,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private List<MovieResultsResponse.MovieResultsInfo> movieResultsResponse;
     Context mContext;
 
-    public MovieAdapter(List<MovieResultsResponse.MovieResultsInfo> movieResultsResponse, Context context) {
-        this.movieResultsResponse = movieResultsResponse;
+    public MovieAdapter (Context context) {
         mContext = context;
     }
 
@@ -48,9 +47,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.bind(position);
     }
 
+
+    public void setMovieResultsResponse(List<MovieResultsResponse.MovieResultsInfo> movieResultsResponse) {
+        this.movieResultsResponse = movieResultsResponse;
+    }
+
     @Override
     public int getItemCount() {
-        return movieResultsResponse.size();
+        if(movieResultsResponse == null) {
+            return 0;
+        }
+        else {
+            return movieResultsResponse.size();
+        }
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

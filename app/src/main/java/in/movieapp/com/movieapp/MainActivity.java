@@ -3,6 +3,7 @@ package in.movieapp.com.movieapp;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean showTopRatingMenuOption = true;
     private TextView mTextView;
 
+    private Parcelable layoutManagerSavedstate;
+    private final String SAVED_LAYOUT_MANAGER = "layoutManager";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         movieRecyclerView = (RecyclerView) findViewById(R.id.movieRecyclerView);
         mTextView= (TextView) findViewById(R.id.favoriteMovie);
         retorfitAPIInterface = new NetworkUtils().getRetorfitAPIInterface(AppConstants.movieBaseURL);
+        showMoviesInRecyclerView();
         getPopularMovieResults();
     }
 
@@ -64,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     List<MovieResultsResponse.MovieResultsInfo> movieResultsResponseData = response.body().getMovieResults();
                     setMovieRecyclerViewAndDefaultTextViewVisibility(View.VISIBLE, View.GONE);
-                    showMoviesInRecyclerView(movieResultsResponseData);
+                    movieAdapter.setMovieResultsResponse(movieResultsResponseData);
+                    restoreLayoutState();
+                    movieAdapter.notifyDataSetChanged();
                 }
                 else {
                     progressDialog.dismiss();
@@ -97,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                     List<MovieResultsResponse.MovieResultsInfo> movieResultsResponseData = response.body().getMovieResults();
                     setMovieRecyclerViewAndDefaultTextViewVisibility(View.VISIBLE, View.GONE);
-                    showMoviesInRecyclerView(movieResultsResponseData);
+                    movieAdapter.setMovieResultsResponse(movieResultsResponseData);
+                    restoreLayoutState();
+                    movieAdapter.notifyDataSetChanged();
                 }
                 else {
                     progressDialog.dismiss();
@@ -115,10 +124,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showMoviesInRecyclerView(List<MovieResultsResponse.MovieResultsInfo> movieResultsResponseData){
+    private void showMoviesInRecyclerView(){
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
         movieRecyclerView.setLayoutManager(layoutManager);
-        movieAdapter = new MovieAdapter(movieResultsResponseData, this);
+        movieAdapter = new MovieAdapter( this);
         movieRecyclerView.setAdapter(movieAdapter);
     }
 
@@ -169,5 +178,26 @@ public class MainActivity extends AppCompatActivity {
     private void setMovieRecyclerViewAndDefaultTextViewVisibility(int recyclerViewVisibility, int textViewVisibility) {
         movieRecyclerView.setVisibility(recyclerViewVisibility);
         mTextView.setVisibility(textViewVisibility);
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SAVED_LAYOUT_MANAGER, movieRecyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState != null) {
+            layoutManagerSavedstate = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
+        }
+    }
+
+    private void restoreLayoutState() {
+        if (layoutManagerSavedstate != null) {
+            movieRecyclerView.getLayoutManager().onRestoreInstanceState(layoutManagerSavedstate);
+        }
     }
 }
