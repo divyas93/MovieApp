@@ -3,6 +3,7 @@ package in.movieapp.com.movieapp;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,6 +22,9 @@ public class FavActivity extends AppCompatActivity {
     private TextView mTextView;
     private FavoriteAdapter favoriteAdapter;
     private static final String TAG = FavActivity.class.getSimpleName();
+    private RecyclerView.LayoutManager layoutManager;
+    private Parcelable layoutManagerSavedstate;
+    private final String SAVED_LAYOUT_MANAGER = "layoutManager";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +33,18 @@ public class FavActivity extends AppCompatActivity {
         movieRecyclerView = (RecyclerView) findViewById(R.id.movieRecyclerView);
         mTextView= (TextView) findViewById(R.id.favoriteMovie);
 
-        setupFavMovies();
-
+        showFavMoviesInRecyclerView();
+        loadFavMoviesData();
     }
 
-    private void setupFavMovies(){
+    private void showFavMoviesInRecyclerView(){
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
+        movieRecyclerView.setLayoutManager(layoutManager);
+        favoriteAdapter = new FavoriteAdapter( this);
+        movieRecyclerView.setAdapter(favoriteAdapter);
+    }
+
+    private void loadFavMoviesData(){
         AppViewModel viewModel = ViewModelProviders.of(this).get(AppViewModel.class);
         viewModel.fetchAllFavMovies().observe(this, new Observer<List<FavouriteMovieEntity>>() {
             @Override
@@ -45,22 +56,37 @@ public class FavActivity extends AppCompatActivity {
                 }
                 else {
                     setMovieRecyclerViewAndDefaultTextViewVisibility(View.VISIBLE, View.GONE);
-                    showFavMoviesInRecyclerView(favouriteMovieEntities);
+                    favoriteAdapter.setFavouriteMovieEntities(favouriteMovieEntities);
+                    restoreLayoutState();
+                    favoriteAdapter.notifyDataSetChanged();
                 }
             }
         });
     }
 
-    private void showFavMoviesInRecyclerView(List<FavouriteMovieEntity> favouriteMovieEntities){
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
-        movieRecyclerView.setLayoutManager(layoutManager);
-        favoriteAdapter = new FavoriteAdapter(favouriteMovieEntities, this);
-        movieRecyclerView.setAdapter(favoriteAdapter);
-    }
-
     private void setMovieRecyclerViewAndDefaultTextViewVisibility(int recyclerViewVisibility, int textViewVisibility) {
         movieRecyclerView.setVisibility(recyclerViewVisibility);
         mTextView.setVisibility(textViewVisibility);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SAVED_LAYOUT_MANAGER, movieRecyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState != null) {
+            layoutManagerSavedstate = savedInstanceState.getParcelable(SAVED_LAYOUT_MANAGER);
+        }
+    }
+
+    private void restoreLayoutState() {
+        if (layoutManagerSavedstate != null) {
+            movieRecyclerView.getLayoutManager().onRestoreInstanceState(layoutManagerSavedstate);
+        }
     }
 
 }

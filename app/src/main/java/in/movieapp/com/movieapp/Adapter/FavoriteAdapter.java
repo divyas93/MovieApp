@@ -26,8 +26,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
     private List<FavouriteMovieEntity> favouriteMovieEntities;
     Context mContext;
 
-    public FavoriteAdapter(List<FavouriteMovieEntity> favouriteMovieEntities, Context context) {
-        this.favouriteMovieEntities = favouriteMovieEntities;
+    public FavoriteAdapter( Context context) {
         mContext = context;
     }
 
@@ -47,9 +46,20 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         holder.bind(position);
     }
 
+
+    public void setFavouriteMovieEntities(List<FavouriteMovieEntity> favouriteMovieEntities) {
+        this.favouriteMovieEntities = favouriteMovieEntities;
+    }
+
     @Override
     public int getItemCount() {
-        return favouriteMovieEntities.size();
+        if (favouriteMovieEntities == null) {
+            return 0;
+        }
+
+        else {
+            return favouriteMovieEntities.size();
+        }
     }
 
     class FavoriteMovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
