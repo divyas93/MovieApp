@@ -37,7 +37,8 @@ public class FavActivity extends AppCompatActivity {
     }
 
     private void showFavMoviesInRecyclerView(){
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
+        int count = AppUtils.calculateNoOfGridColumns(this);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,count);
         movieRecyclerView.setLayoutManager(layoutManager);
         favoriteAdapter = new FavoriteAdapter( this);
         movieRecyclerView.setAdapter(favoriteAdapter);

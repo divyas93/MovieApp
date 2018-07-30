@@ -141,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showMoviesInRecyclerView(){
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
+        int count = AppUtils.calculateNoOfGridColumns(this);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,count);
         movieRecyclerView.setLayoutManager(layoutManager);
         movieAdapter = new MovieAdapter( this);
         movieRecyclerView.setAdapter(movieAdapter);
