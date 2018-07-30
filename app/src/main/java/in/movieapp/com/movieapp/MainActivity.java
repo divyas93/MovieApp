@@ -2,6 +2,7 @@ package in.movieapp.com.movieapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
@@ -36,11 +37,13 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem popularity;
 
     private RetorfitAPIInterface retorfitAPIInterface;
-    private boolean showTopRatingMenuOption = true;
     private TextView mTextView;
 
     private Parcelable layoutManagerSavedstate;
     private final String SAVED_LAYOUT_MANAGER = "layoutManager";
+    private SharedPreferences preferences;
+    private Object lock = new Object();
+
 
 
     @Override
@@ -51,7 +54,18 @@ public class MainActivity extends AppCompatActivity {
         mTextView= (TextView) findViewById(R.id.favoriteMovie);
         retorfitAPIInterface = new NetworkUtils().getRetorfitAPIInterface(AppConstants.movieBaseURL);
         showMoviesInRecyclerView();
-        getPopularMovieResults();
+        preferences = getSharedPreferences("MovieAppPref", MODE_PRIVATE);
+        String sortOrder = preferences.getString(AppConstants.sortTypeKey, AppConstants.popularMoviesPath);
+        populateMovies(sortOrder);
+    }
+
+    private void populateMovies(String sortOrder){
+        if(sortOrder.equalsIgnoreCase(AppConstants.popularMoviesPath)) {
+            getPopularMovieResults();
+        }
+        else if(sortOrder.equalsIgnoreCase(AppConstants.topRated)) {
+            getTopRatedMovieResults();
+        }
     }
 
     private void getPopularMovieResults(){
@@ -141,16 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (showTopRatingMenuOption) {
-            topRating.setVisible(true);
-            popularity.setVisible(false);
-        }
-
-        else if (!showTopRatingMenuOption) {
-            topRating.setVisible(false);
-            popularity.setVisible(true);
-        }
-
+        setSortingOptionsVisibility();
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -158,18 +163,17 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.sortByPopularity) {
             getPopularMovieResults();
-            showTopRatingMenuOption = true;
+            putStringInSharedPref(AppConstants.sortTypeKey, AppConstants.popularMoviesPath);
         }
 
         else if(item.getItemId() == R.id.sortByRatingAction) {
             getTopRatedMovieResults();
-            showTopRatingMenuOption = false;
+            putStringInSharedPref(AppConstants.sortTypeKey, AppConstants.topRated);
         }
 
         else if(item.getItemId() == R.id.favoritesScreen) {
             Intent intent = new Intent(this, FavActivity.class);
             startActivity(intent);
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -198,6 +202,32 @@ public class MainActivity extends AppCompatActivity {
     private void restoreLayoutState() {
         if (layoutManagerSavedstate != null) {
             movieRecyclerView.getLayoutManager().onRestoreInstanceState(layoutManagerSavedstate);
+        }
+    }
+
+    private void putStringInSharedPref(String key, String value) {
+        synchronized (this.lock) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(key, value);
+            editor.apply();
+        }
+
+    }
+
+    private void setSortingOptionsVisibility() {
+        String sortOrder = preferences.getString(AppConstants.sortTypeKey, AppConstants.popularMoviesPath);
+        if(sortOrder.equalsIgnoreCase(AppConstants.popularMoviesPath)) {
+            topRating.setVisible(true);
+            popularity.setVisible(false);
+        }
+        else if (sortOrder.equalsIgnoreCase(AppConstants.topRated)) {
+            topRating.setVisible(false);
+            popularity.setVisible(true);
+        }
+
+        else {
+            topRating.setVisible(true);
+            popularity.setVisible(false);
         }
     }
 }

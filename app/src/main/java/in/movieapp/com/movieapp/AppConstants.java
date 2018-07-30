@@ -23,4 +23,5 @@ public class AppConstants {
     public static final String youtubeTrailerImageBaseUrl = "https://img.youtube.com/vi/";
     public static final String youtubeWebBaseUrl = "https://www.youtube.com/watch?v=";
     public static final String youtubeAppBaseUrl = "vnd.youtube:";
+    public static final String sortTypeKey = "sortType";
 }
