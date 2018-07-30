@@ -14,15 +14,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import in.movieapp.com.movieapp.Adapter.FavoriteAdapter;
 import in.movieapp.com.movieapp.database.FavouriteMovieEntity;
 
 public class FavActivity extends AppCompatActivity {
-    private RecyclerView movieRecyclerView;
-    private TextView mTextView;
+    @BindView(R.id.movieRecyclerView) RecyclerView movieRecyclerView;
+    @BindView(R.id.favoriteMovie) TextView mTextView;
     private FavoriteAdapter favoriteAdapter;
     private static final String TAG = FavActivity.class.getSimpleName();
-    private RecyclerView.LayoutManager layoutManager;
     private Parcelable layoutManagerSavedstate;
     private final String SAVED_LAYOUT_MANAGER = "layoutManager";
 
@@ -30,9 +31,7 @@ public class FavActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        movieRecyclerView = (RecyclerView) findViewById(R.id.movieRecyclerView);
-        mTextView= (TextView) findViewById(R.id.favoriteMovie);
-
+        ButterKnife.bind(this);
         showFavMoviesInRecyclerView();
         loadFavMoviesData();
     }

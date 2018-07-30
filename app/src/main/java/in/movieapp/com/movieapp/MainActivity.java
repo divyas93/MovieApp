@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import in.movieapp.com.movieapp.Adapter.MovieAdapter;
 import in.movieapp.com.movieapp.Network.NetworkUtils;
 import in.movieapp.com.movieapp.Network.RetorfitAPIInterface;
@@ -31,27 +33,27 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private RecyclerView movieRecyclerView;
+    @BindView(R.id.movieRecyclerView) RecyclerView movieRecyclerView;
+    @BindView(R.id.favoriteMovie) TextView mTextView;
+
     private MovieAdapter movieAdapter;
+
     private MenuItem topRating;
     private MenuItem popularity;
 
     private RetorfitAPIInterface retorfitAPIInterface;
-    private TextView mTextView;
 
     private Parcelable layoutManagerSavedstate;
     private final String SAVED_LAYOUT_MANAGER = "layoutManager";
+
     private SharedPreferences preferences;
     private Object lock = new Object();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        movieRecyclerView = (RecyclerView) findViewById(R.id.movieRecyclerView);
-        mTextView= (TextView) findViewById(R.id.favoriteMovie);
+        ButterKnife.bind(this);
         retorfitAPIInterface = new NetworkUtils().getRetorfitAPIInterface(AppConstants.movieBaseURL);
         showMoviesInRecyclerView();
         preferences = getSharedPreferences("MovieAppPref", MODE_PRIVATE);

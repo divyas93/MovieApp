@@ -22,6 +22,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import in.movieapp.com.movieapp.Adapter.ReviewAdapter;
 import in.movieapp.com.movieapp.Adapter.TrailerAdapter;
 import in.movieapp.com.movieapp.AppExecutors.AppExecutors;
@@ -42,15 +44,16 @@ import retrofit2.Response;
 public class DetailActivity extends AppCompatActivity implements TrailerAdapter.TrailerClickListener{
 
     private static final String TAG = DetailActivity.class.getSimpleName();
-    private TextView mOriginalTitleText;
-    private ImageView moviePosterView;
-    private TextView mUserRatingText;
-    private TextView mReleaseDateText;
-    private TextView mOverViewText;
-    private RecyclerView mTrailerRecyclerViewer;
-    private TextView mTrailerErrortextView;
-    private RecyclerView mReviewRecyclerView;
-    private TextView mReviewErrortextView;
+    @BindView(R.id.originalTitleText) TextView mOriginalTitleText;
+    @BindView(R.id.moviePoster) ImageView moviePosterView;
+    @BindView(R.id.userRatingText) TextView mUserRatingText;
+    @BindView(R.id.releaseDateText) TextView mReleaseDateText;
+    @BindView(R.id.overViewText) TextView mOverViewText;
+    @BindView(R.id.trailerRecyclerViewer) RecyclerView mTrailerRecyclerViewer;
+    @BindView(R.id.trailerErrorText) TextView mTrailerErrortextView;
+    @BindView(R.id.reviewRecyclerViewer) RecyclerView mReviewRecyclerView;
+    @BindView(R.id.reviewErrorText) TextView mReviewErrortextView;
+
     private List<TrailerResultResponse.TrailerResultsInfo> trailerResultsResponseData;
     private TrailerAdapter trailerAdapter;
     private List<ReviewResultsResponse.ReviewResultsInfo> reviewResultsResponseData;
@@ -72,17 +75,9 @@ public class DetailActivity extends AppCompatActivity implements TrailerAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
         setTitle("Movie Info");
 
-        mOriginalTitleText = (TextView) findViewById(R.id.originalTitleText);
-        moviePosterView = (ImageView) findViewById(R.id.moviePoster);
-        mUserRatingText = (TextView) findViewById(R.id.userRatingText);
-        mReleaseDateText = (TextView) findViewById(R.id.releaseDateText);
-        mOverViewText = (TextView) findViewById(R.id.overViewText);
-        mTrailerRecyclerViewer = (RecyclerView) findViewById(R.id.trailerRecyclerViewer);
-        mTrailerErrortextView = (TextView) findViewById(R.id.trailerErrorText);
-        mReviewRecyclerView = (RecyclerView) findViewById(R.id.reviewRecyclerViewer);
-        mReviewErrortextView = (TextView) findViewById(R.id.reviewErrorText);
         mDb = FavouriteDatabase.getFavouriteDatabaseInstance(this);
 
         Intent intent = getIntent();
